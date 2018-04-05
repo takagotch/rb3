@@ -2,6 +2,48 @@ class Entry < ActiveRecord::Base
   belongs_to :blog
 end
 
+class ActiveRecord::Base
+  belongs_to :blog, :counter_cache => true
+end
+
+
+class Entry < ActiveRecord::Base
+  has_many :taggings
+  has_many :tags, :through => :taggings
+
+  def tag_string=(tag_string)
+    tag_names = tag_string.split(/\s/)
+    self.tags = tag_names.map do |tag_name|
+      Tag.find_or_initialize_by_name(tag_name)
+    end
+  end
+end
+
+
+
+
+
+
+/*
+	entry = Entry.new(
+		:title => "DB Columns",
+		:content => "setter",
+		:tag_stirng => "Rails ActiveRecord setter Tips")	
+	entry.tags
+*/
+
+
+
+
+/*
+	blog.entries.length 
+	blog.entries.size 
+	blog.entries.empty?
+
+*/
+
+
+
 /*
 twenty_entries = Entry.limit(20)
 twenty_entries.each do |entry|
